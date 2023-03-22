@@ -34,7 +34,7 @@ class DuckController extends AbstractController
             return $this->redirectToRoute('app_duck_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('duck/new.html.twig', [
+        return $this->render('duck/new.html.twig', [
             'duck' => $duck,
             'form' => $form,
         ]);
@@ -60,7 +60,7 @@ class DuckController extends AbstractController
             return $this->redirectToRoute('app_duck_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('duck/edit.html.twig', [
+        return $this->render('duck/edit.html.twig', [
             'duck' => $duck,
             'form' => $form,
         ]);
