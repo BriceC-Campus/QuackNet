@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DuckRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,6 +27,15 @@ class Duck implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $lastname = null;
+
+    #[ORM\Column(type: Types::TEXT, unique: true)]
+    private ?string $duckname = null;
 
     public function getId(): ?int
     {
@@ -95,5 +105,41 @@ class Duck implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getDuckname(): ?string
+    {
+        return $this->duckname;
+    }
+
+    public function setDuckname(string $duckname): self
+    {
+        $this->duckname = $duckname;
+
+        return $this;
     }
 }
