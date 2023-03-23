@@ -10,6 +10,9 @@
             <tr class="table-dark">
                 <th>Id</th>
                 <th>Email</th>
+                <th>Duckname</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Roles</th>
                 <th>Password</th>
                 <th>actions</th>
@@ -20,6 +23,9 @@
             <tr>
                 <td>{{ duck.id }}</td>
                 <td>{{ duck.email }}</td>
+                <td>{{ duck.duckname }}</td>
+                <td>{{ duck.firstname }}</td>
+                <td>{{ duck.lastname }}</td>
                 <td>{{ duck.roles ? duck.roles|json_encode : '' }}</td>
                 <td>{{ duck.password }}</td>
                 <td>

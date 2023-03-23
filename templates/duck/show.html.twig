@@ -3,6 +3,7 @@
 {% block title %}Duck{% endblock %}
 
 {% block body %}
+    <a href="{{ path('app_duck_index') }}">back to list</a>
     <h1>Duck</h1>
 
     <table class="table">
@@ -16,6 +17,18 @@
                 <td>{{ duck.email }}</td>
             </tr>
             <tr>
+                <th>Duckname</th>
+                <td>{{ duck.duckname }}</td>
+            </tr>
+            <tr>
+                <th>First Name</th>
+                <td>{{ duck.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td>{{ duck.lastname }}</td>
+            </tr>
+            <tr>
                 <th>Roles</th>
                 <td>{{ duck.roles ? duck.roles|json_encode : '' }}</td>
             </tr>
@@ -26,7 +39,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_duck_index') }}">back to list</a>
 
     <a href="{{ path('app_duck_edit', {'id': duck.id}) }}">edit</a>
 

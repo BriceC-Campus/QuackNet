@@ -3,11 +3,11 @@
 {% block title %}Edit Duck{% endblock %}
 
 {% block body %}
+    <a href="{{ path('app_duck_index') }}">back to list</a>
     <h1>Edit Duck</h1>
 
     {{ include('duck/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_duck_index') }}">back to list</a>
 
     {{ include('duck/_delete_form.html.twig') }}
 {% endblock %}

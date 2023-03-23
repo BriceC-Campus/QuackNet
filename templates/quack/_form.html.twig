@@ -1,4 +1,15 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<fieldset class="row">
+    <div class="form-group">
+        <label class="col-form-label col-form-label-lg mt-4" for="content">{{ form_label(form.content) }}</label>
+        {{ form_widget(form.content, {'attr': {'id': 'content',
+            'class': 'form-control form-control-lg',
+            'placeholder': 'quackquack quack quaaack'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_widget(form.created_at, {'attr': {'hidden': 'true'}}) }}
+    </div>
+    <button type="submit" class="btn btn-primary col-md-1 col-6 m-auto">{{ button_label|default('Send') }}</button>
+</fieldset>
+
 {{ form_end(form) }}

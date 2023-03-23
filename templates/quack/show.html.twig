@@ -3,6 +3,7 @@
 {% block title %}Quack{% endblock %}
 
 {% block body %}
+    <a href="{{ path('app_quack_index') }}">back to list</a>
     <h1>Quack</h1>
 
     <table class="table">
@@ -22,7 +23,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_quack_index') }}">back to list</a>
 
     <a href="{{ path('app_quack_edit', {'id': quack.id}) }}">edit</a>
 

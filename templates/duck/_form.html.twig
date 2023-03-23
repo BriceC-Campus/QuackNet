@@ -1,4 +1,28 @@
 {{ form_start(form) }}
+<fieldset class="row">
+    <div class="form-floating mb-3 col-12 col-md-2">
+        {{ form_widget(form.duckname, {'attr': {'id': 'duckname','class': 'form-control', 'placeholder': 'quack@quack.quack'}}) }}
+        <label for="duckname" class="ms-2">{{ form_label(form.duckname) }}</label>
+    </div>
+    <div class="form-floating mb-3 col-12 col-md-2">
+        {{ form_widget(form.firstname, {'attr': {'id': 'firstname','class': 'form-control', 'placeholder': 'Quack'}}) }}
+        <label for="firstname" class="ms-2">{{ form_label(form.firstname) }}</label>
+    </div>
+    <div class="form-floating mb-3 col-12 col-md-2">
+        {{ form_widget(form.lastname, {'attr': {'id': 'lastname','class': 'form-control', 'placeholder': 'quack@quack.quack'}}) }}
+        <label for="lastname" class="ms-2">{{ form_label(form.lastname) }}</label>
+    </div>
+    <div class="form-floating mb-3 col-12 col-md-3">
+        {{ form_widget(form.email, { 'attr': {'id': 'email', 'class': 'form-control', 'placeholder': 'Enter email'}}) }}
+        <label for="email" class="ms-2">{{ form_label(form.email) }}</label>
+    </div>
+    {{ form_help(form.email) }}
+    <div class="form-floating mb-3 col-12 col-md-2">
+        {{ form_widget(form.password, {'attr': {'class': 'form-control', 'id': 'password', 'placeholder': 'password'}}) }}
+        <label for="password" class="ms-2">{{ form_label(form.password) }}</label>
+    </div>
+
     {{ form_rest(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button type="submit" class="btn btn-primary col-md-1 col-6 m-auto">{{ button_label|default('Save') }}</button>
+</fieldset>
 {{ form_end(form) }}
