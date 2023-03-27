@@ -28,6 +28,10 @@ class Quack
     #[ORM\OneToMany(mappedBy: 'comment', targetEntity: self::class)]
     private Collection $comments;
 
+    #[ORM\ManyToOne(inversedBy: 'quacks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Duck $duck = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -100,6 +104,18 @@ class Quack
                 $comment->setComment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDuck(): ?Duck
+    {
+        return $this->duck;
+    }
+
+    public function setDuck(?Duck $duck): self
+    {
+        $this->duck = $duck;
 
         return $this;
     }

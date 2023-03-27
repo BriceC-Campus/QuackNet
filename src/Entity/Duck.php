@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DuckRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -39,6 +41,14 @@ class Duck implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::TEXT, unique: true)]
     private ?string $duckname = null;
+
+    #[ORM\OneToMany(mappedBy: 'duck', targetEntity: Quack::class)]
+    private Collection $quacks;
+
+    public function __construct()
+    {
+        $this->quacks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -142,6 +152,36 @@ class Duck implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDuckname(string $duckname): self
     {
         $this->duckname = $duckname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quack>
+     */
+    public function getQuacks(): Collection
+    {
+        return $this->quacks;
+    }
+
+    public function addQuack(Quack $quack): self
+    {
+        if (!$this->quacks->contains($quack)) {
+            $this->quacks->add($quack);
+            $quack->setDuck($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuack(Quack $quack): self
+    {
+        if ($this->quacks->removeElement($quack)) {
+            // set the owning side to null (unless already changed)
+            if ($quack->getDuck() === $this) {
+                $quack->setDuck(null);
+            }
+        }
 
         return $this;
     }

@@ -23,7 +23,7 @@
                 <a href="{{ path('app_quack_show', {'id': quack.id}) }}"
                    class="list-group-item list-group-item-action flex-column align-items-start active">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ quack.id }}</h5>
+                        <h5 class="mb-1">{{ quack.duck.duckname }}</h5>
                         <small>{{ date('now').diff(quack.createdAt).format('Il y as %dj %hH %imins.') }}</small>
                     </div>
                     <p class="mb-1">{{ quack.content }}</p>
@@ -33,7 +33,7 @@
                     <a href="{{ path('app_quack_show', {'id': comment.id}) }}"
                        class="list-group-item list-group-item-action flex-column align-items-start w-100 mx-auto">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ comment.id }}</h5>
+                            <h5 class="mb-1">{{ comment.duck.duckname }}</h5>
                             <small class="text-muted">{{ date('now').diff(comment.createdAt).format('Il y as %dj %hH %imins.') }}</small>
                         </div>
                         <p class="mb-1">{{ comment.content }}</p>
@@ -43,7 +43,7 @@
                         <a href="{{ path('app_quack_show', {'id': com.id}) }}"
                            class="list-group-item list-group-item-action flex-column align-items-start w-75 mx-auto">
                             <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">{{ com.id }}</h6>
+                                <h6 class="mb-1">{{ com.duck.duckname }}</h6>
                                 <small class="text-muted">{{ date('now').diff(com.createdAt).format('Il y as %dj %hH %imins.') }}</small>
                             </div>
                             <p class="mb-1">{{ com.content }}</p>

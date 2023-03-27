@@ -30,7 +30,11 @@ class QuackController extends AbstractController
     #[Route('/quack/new', name: 'app_quack_new', methods: ['GET', 'POST'])]
     public function new(Request $request, QuackRepository $quackRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $user = $this->getUser();
+
         $quack = new Quack();
+        $quack->setDuck($user);
         $form = $this->createForm(QuackType::class, $quack);
         $form->handleRequest($request);
 
@@ -40,15 +44,17 @@ class QuackController extends AbstractController
             return $this->redirectToRoute('app_quack_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('quack/new.html.twig', [
+        return $this->render('quack/new.html.twig', [
             'quack' => $quack,
             'form' => $form,
+            'user' => $user,
         ]);
     }
 
     #[Route('/quack/{id}', name: 'app_quack_show', methods: ['GET'])]
     public function show(Quack $quack): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         return $this->render('quack/show.html.twig', [
             'quack' => $quack,
         ]);
@@ -57,6 +63,7 @@ class QuackController extends AbstractController
     #[Route('/quack/{id}/edit', name: 'app_quack_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Quack $quack, QuackRepository $quackRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $form = $this->createForm(QuackType::class, $quack);
         $form->handleRequest($request);
 
@@ -66,7 +73,7 @@ class QuackController extends AbstractController
             return $this->redirectToRoute('app_quack_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('quack/edit.html.twig', [
+        return $this->render('quack/edit.html.twig', [
             'quack' => $quack,
             'form' => $form,
         ]);
@@ -75,6 +82,7 @@ class QuackController extends AbstractController
     #[Route('/quack/{id}', name: 'app_quack_delete', methods: ['POST'])]
     public function delete(Request $request, Quack $quack, QuackRepository $quackRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($this->isCsrfTokenValid('delete'.$quack->getId(), $request->request->get('_token'))) {
             $quackRepository->remove($quack, true);
         }
