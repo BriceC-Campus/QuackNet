@@ -19,6 +19,13 @@ class QuackController extends AbstractController
             'quacks' => $quackRepository->findAll(),
         ]);
     }
+    #[Route('/quack', name: 'app_quackAdmin_index', methods: ['GET'])]
+    public function indexAdmin(QuackRepository $quackRepository): Response
+    {
+        return $this->render('quack/indexAdmin.html.twig', [
+            'quacks' => $quackRepository->findAll(),
+        ]);
+    }
 
     #[Route('/quack/new', name: 'app_quack_new', methods: ['GET', 'POST'])]
     public function new(Request $request, QuackRepository $quackRepository): Response

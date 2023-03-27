@@ -3,37 +3,57 @@
 {% block title %}Quack index{% endblock %}
 
 {% block body %}
+    {% set alreadyDisplayed = [] %}
     <div class="row">
-        <h1>Quack index</h1>
-
-        <table class="table">
-            <thead>
-            <tr class="table-dark">
-                <th>Id</th>
-                <th>Content</th>
-                <th>Created_at</th>
-                <th>actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for quack in quacks %}
-                <tr>
-                    <td>{{ quack.id }}</td>
-                    <td>{{ quack.content }}</td>
-                    <td>{{ quack.createdAt ? quack.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>
-                        <a href="{{ path('app_quack_show', {'id': quack.id}) }}">show</a>
-                        <a href="{{ path('app_quack_edit', {'id': quack.id}) }}">edit</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">no records found</td>
-                </tr>
+        {# {% for quack in quacks %}
+            <h2>{{ quack.content }}</h2>
+            <p>{{ quack.createdAt ? quack.createdAt|date('Y-m-d H:i:s') : '' }}</p>
+            {% for comment in quack.comments %}
+                <a href="{{ path('app_quack_show', {'id': comment.id}) }}"><h3
+                            class="text-muted">{{ comment.content }}</h3></a>
             {% endfor %}
-            </tbody>
-        </table>
+        {% else %}
+            <p>no quacks found</p>
+        {% endfor %} #}
 
-        <a href="{{ path('app_quack_new') }}">Create new</a>
+        {% for quack in quacks|sort((a, b) => a.comment <=> b.comment) %}
+            {% if quack.id not in alreadyDisplayed %}
+                {% set alreadyDisplayed = alreadyDisplayed|merge([quack.id]) %}
+                <div class="list-group my-1 pe-0">
+                <a href="{{ path('app_quack_show', {'id': quack.id}) }}"
+                   class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ quack.id }}</h5>
+                        <small>{{ date('now').diff(quack.createdAt).format('Il y as %dj %hH %imins.') }}</small>
+                    </div>
+                    <p class="mb-1">{{ quack.content }}</p>
+                </a>
+                {% for comment in quack.comments %}
+                    {% set alreadyDisplayed = alreadyDisplayed|merge([comment.id]) %}
+                    <a href="{{ path('app_quack_show', {'id': comment.id}) }}"
+                       class="list-group-item list-group-item-action flex-column align-items-start w-100 mx-auto">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ comment.id }}</h5>
+                            <small class="text-muted">{{ date('now').diff(comment.createdAt).format('Il y as %dj %hH %imins.') }}</small>
+                        </div>
+                        <p class="mb-1">{{ comment.content }}</p>
+                    </a>
+                    {% for com in comment.comments %}
+                        {% set alreadyDisplayed = alreadyDisplayed|merge([com.id]) %}
+                        <a href="{{ path('app_quack_show', {'id': com.id}) }}"
+                           class="list-group-item list-group-item-action flex-column align-items-start w-75 mx-auto">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ com.id }}</h6>
+                                <small class="text-muted">{{ date('now').diff(com.createdAt).format('Il y as %dj %hH %imins.') }}</small>
+                            </div>
+                            <p class="mb-1">{{ com.content }}</p>
+                        </a>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            </div>
+        {% else %}
+            <p>no quacks found</p>
+        {% endfor %}
     </div>
 {% endblock %}

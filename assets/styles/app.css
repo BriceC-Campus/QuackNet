@@ -1,3 +1,7 @@
 @import '~bootstrap';
 @import "~bootswatch/dist/sketchy/bootstrap.css";
 @import "~@fortawesome/fontawesome-free/css/all.css";
+
+a{
+    text-decoration: none;
+}
