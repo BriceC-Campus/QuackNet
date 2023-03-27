@@ -27,6 +27,14 @@
                         <small>{{ date('now').diff(quack.createdAt).format('Il y as %dj %hH %imins.') }}</small>
                     </div>
                     <p class="mb-1">{{ quack.content }}</p>
+                    {% set tags = quack.content|split('#') %}
+                    {% if quack.content|u.split('#')|length > 1 %}
+                        {% for key, tag in tags %}
+                            {% if key > 0 %}
+                                <small class="text-muted">#{{ tag }}</small>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </a>
                 {% for comment in quack.comments %}
                     {% set alreadyDisplayed = alreadyDisplayed|merge([comment.id]) %}
@@ -37,6 +45,15 @@
                             <small class="text-muted">{{ date('now').diff(comment.createdAt).format('Il y as %dj %hH %imins.') }}</small>
                         </div>
                         <p class="mb-1">{{ comment.content }}</p>
+
+                        {% set tags = comment.content|split('#') %}
+                        {% if comment.content|u.split('#')|length > 1 %}
+                            {% for key, tag in tags %}
+                                {% if key > 0 %}
+                                    <small class="text-muted">#{{ tag }}</small>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </a>
                     {% for com in comment.comments %}
                         {% set alreadyDisplayed = alreadyDisplayed|merge([com.id]) %}
@@ -47,6 +64,14 @@
                                 <small class="text-muted">{{ date('now').diff(com.createdAt).format('Il y as %dj %hH %imins.') }}</small>
                             </div>
                             <p class="mb-1">{{ com.content }}</p>
+                            {% set tags = com.content|split('#') %}
+                            {% if com.content|u.split('#')|length > 1 %}
+                                {% for key, tag in tags %}
+                                    {% if key > 0 %}
+                                        <small class="text-muted">#{{ tag }}</small>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                         </a>
                     {% endfor %}
                 {% endfor %}
