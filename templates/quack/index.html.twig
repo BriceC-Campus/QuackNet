@@ -5,49 +5,19 @@
 {% block body %}
     {% set alreadyDisplayed = [] %}
     <div class="row">
-        {# {% for quack in quacks %}
-            <h2>{{ quack.content }}</h2>
-            <p>{{ quack.createdAt ? quack.createdAt|date('Y-m-d H:i:s') : '' }}</p>
-            {% for comment in quack.comments %}
-                <a href="{{ path('app_quack_show', {'id': comment.id}) }}"><h3
-                            class="text-muted">{{ comment.content }}</h3></a>
-            {% endfor %}
-        {% else %}
-            <p>no quacks found</p>
-        {% endfor %} #}
-
         {% for quack in quacks|sort((a, b) => a.comment <=> b.comment) %}
             {% if quack.id not in alreadyDisplayed %}
                 {% set alreadyDisplayed = alreadyDisplayed|merge([quack.id]) %}
                 <div class="list-group my-1 pe-0">
-                <a href="{{ path('app_quack_show', {'id': quack.id}) }}"
-                   class="list-group-item list-group-item-action flex-column align-items-start active">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ quack.duck.duckname }}</h5>
-                        <small>{{ date('now').diff(quack.createdAt).format('Il y as %dj %hH %imins.') }}</small>
-                    </div>
-                    <p class="mb-1">{{ quack.content }}</p>
-                    {% set tags = quack.content|split('#') %}
-                    {% if quack.content|u.split('#')|length > 1 %}
-                        {% for key, tag in tags %}
-                            {% if key > 0 %}
-                                <small class="text-muted">#{{ tag }}</small>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </a>
-                {% for comment in quack.comments %}
-                    {% set alreadyDisplayed = alreadyDisplayed|merge([comment.id]) %}
-                    <a href="{{ path('app_quack_show', {'id': comment.id}) }}"
-                       class="list-group-item list-group-item-action flex-column align-items-start w-100 mx-auto">
+                    <a href="{{ path('app_quack_show', {'id': quack.id}) }}"
+                       class="list-group-item list-group-item-action flex-column align-items-start active">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ comment.duck.duckname }}</h5>
-                            <small class="text-muted">{{ date('now').diff(comment.createdAt).format('Il y as %dj %hH %imins.') }}</small>
+                            <h5 class="mb-1">{{ quack.duck.duckname }}</h5>
+                            <small>{{ date('now').diff(quack.createdAt).format('Il y as %dj %hH %imins.') }}</small>
                         </div>
-                        <p class="mb-1">{{ comment.content }}</p>
-
-                        {% set tags = comment.content|split('#') %}
-                        {% if comment.content|u.split('#')|length > 1 %}
+                        <p class="mb-1">{{ quack.content }}</p>
+                        {% set tags = quack.content|split('#') %}
+                        {% if quack.content|u.split('#')|length > 1 %}
                             {% for key, tag in tags %}
                                 {% if key > 0 %}
                                     <small class="text-muted">#{{ tag }}</small>
@@ -55,30 +25,14 @@
                             {% endfor %}
                         {% endif %}
                     </a>
-                    {% for com in comment.comments %}
-                        {% set alreadyDisplayed = alreadyDisplayed|merge([com.id]) %}
-                        <a href="{{ path('app_quack_show', {'id': com.id}) }}"
-                           class="list-group-item list-group-item-action flex-column align-items-start w-75 mx-auto">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">{{ com.duck.duckname }}</h6>
-                                <small class="text-muted">{{ date('now').diff(com.createdAt).format('Il y as %dj %hH %imins.') }}</small>
-                            </div>
-                            <p class="mb-1">{{ com.content }}</p>
-                            {% set tags = com.content|split('#') %}
-                            {% if com.content|u.split('#')|length > 1 %}
-                                {% for key, tag in tags %}
-                                    {% if key > 0 %}
-                                        <small class="text-muted">#{{ tag }}</small>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </a>
+                    {% for comment in quack.comments %}
+                        {{ include('quack/_comment.html.twig', {comment: comment, alreadyDisplayed: alreadyDisplayed}) }}
                     {% endfor %}
-                {% endfor %}
+                </div>
             {% endif %}
-            </div>
         {% else %}
             <p>no quacks found</p>
         {% endfor %}
     </div>
 {% endblock %}
+

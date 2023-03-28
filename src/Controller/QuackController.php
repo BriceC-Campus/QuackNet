@@ -40,7 +40,6 @@ class QuackController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $quackRepository->save($quack, true);
-
             return $this->redirectToRoute('app_quack_index', [], Response::HTTP_SEE_OTHER);
         }
 
