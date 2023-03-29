@@ -1,23 +1,27 @@
 {% if comment.id not in alreadyDisplayed %}
     {% set alreadyDisplayed = alreadyDisplayed|merge([comment.id]) %}
-    <a href="{{ path('app_quack_show', {'id': comment.id}) }}"
-       class="list-group-item list-group-item-action flex-column align-items-start w-100 mx-auto">
-        <div class="d-flex w-100 justify-content-between">
-            <h6 class="mb-1">{{ comment.duck.duckname }}</h6>
-            <small class="text-muted">{{ date('now').diff(comment.createdAt).format('Il y as %dj %hH %imins.') }}</small>
-        </div>
-        <p class="mb-1">{{ comment.content }}</p>
-        {% set tags = comment.content|split('#') %}
-        {% if comment.content|u.split('#')|length > 1 %}
-            {% for key, tag in tags %}
-                {% if key > 0 %}
-                    <small class="text-muted">#{{ tag }}</small>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-        {% for subComment in comment.comments %}
-            {{ include('quack/_comment.html.twig', {comment: subComment, alreadyDisplayed: alreadyDisplayed}) }}
-        {% endfor %}
-    </a>
+    <div class="list-group-item list-group-item-action flex-column align-items-start w-{{ w }} mx-auto">
+        <a href="{{ path('app_quack_show', {'id': comment.id}) }}"
+           class="">
+            <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">{{ comment.duck.duckname }}</h6>
+                <small class="text-muted">{{ date('now').diff(comment.createdAt).format('Il y as %dj %hH %imins.') }}</small>
+            </div>
+            <p class="mb-1">{{ comment.content }}</p>
+            {% set tags = comment.content|split('#') %}
+            {% if comment.content|u.split('#')|length > 1 %}
+                {% for key, tag in tags %}
+                    {% if key > 0 %}
+                        <small class="text-muted">#{{ tag }}</small>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </a>
+    </div>
+    {% set w = w - 25 %}
+    {% for subComment in comment.comments %}
+        {{ include('quack/_comment.html.twig', {'comment': subComment, 'alreadyDisplayed': alreadyDisplayed, 'w': w}) }}
+    {% endfor %}
+
 {% endif %}
 

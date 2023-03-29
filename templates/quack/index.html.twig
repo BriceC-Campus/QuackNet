@@ -25,8 +25,9 @@
                             {% endfor %}
                         {% endif %}
                     </a>
+                    {% set w = 100 %}
                     {% for comment in quack.comments %}
-                        {{ include('quack/_comment.html.twig', {comment: comment, alreadyDisplayed: alreadyDisplayed}) }}
+                        {{ include('quack/_comment.html.twig', {'comment': comment, 'alreadyDisplayed': alreadyDisplayed, 'w': w}) }}
                     {% endfor %}
                 </div>
             {% endif %}
