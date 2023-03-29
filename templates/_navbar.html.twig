@@ -15,17 +15,22 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_duck_index') }}">Duck</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_register') }}">Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{path('app_login')}}">Login</a>
-                </li>
+                {% if not is_granted('IS_AUTHENTICATED') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_register') }}">Sign Up</a>
+                    </li>
+                {% endif %}
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-sm-2" type="search" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            {% if is_granted('IS_AUTHENTICATED') %}
+                <div class="me-3 d-inline-flex align-items-center">
+                    <a class="text-light me-3" href="{{ path('app_logout') }}">Log out</a>
+                    <h4 class="text-light mb-0">{{ app.user.duckname }}</h4>
+                </div>
+            {% else %}
+                <div class="me-3">
+                    <a class="text-light" href="{{ path('app_login') }}">Login</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </nav>

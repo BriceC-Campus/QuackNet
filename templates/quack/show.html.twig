@@ -28,7 +28,9 @@
     </table>
 
 
-    <a href="{{ path('app_quack_edit', {'id': quack.id}) }}">edit</a>
+    {% if app.user == quack.duck %}
+        <a href="{{ path('app_quack_edit', {'id': quack.id}) }}">edit</a>
+        {{ include('quack/_delete_form.html.twig') }}
+    {% endif %}
 
-    {{ include('quack/_delete_form.html.twig') }}
 {% endblock %}
