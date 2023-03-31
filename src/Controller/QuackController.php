@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Quack;
 use App\Form\QuackType;
 use App\Repository\QuackRepository;
-use App\Security\Voter\QuackVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +15,7 @@ class QuackController extends AbstractController
     #[Route('/', name: 'app_quack_index', methods: ['GET'])]
     public function index(QuackRepository $quackRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         return $this->render('quack/index.html.twig', [
             'quacks' => $quackRepository->findAll(),
         ]);
@@ -24,16 +24,17 @@ class QuackController extends AbstractController
     #[Route('/quack', name: 'app_quackAdmin_index', methods: ['GET'])]
     public function indexAdmin(QuackRepository $quackRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         return $this->render('quack/indexAdmin.html.twig', [
             'quacks' => $quackRepository->findAll(),
         ]);
     }
 
     #[Route('/quack/new', name: 'app_quack_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, QuackRepository $quackRepository, QuackVoter $quackVoter): Response
+    public function new(Request $request, QuackRepository $quackRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $user = $this->getUser();
+        $this->denyAccessUnlessGranted('view', $user);
 
         $quack = new Quack();
         $quack->setDuck($user);
@@ -62,10 +63,9 @@ class QuackController extends AbstractController
     }
 
     #[Route('/quack/{id}/edit', name: 'app_quack_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Quack $quack, QuackRepository $quackRepository, QuackVoter $quackVoter): Response
+    public function edit(Request $request, Quack $quack, QuackRepository $quackRepository): Response
     {
-        $quackVoter->vote();
-        $this->denyAccessUnlessGranted('edit', $quack);
+        $this->denyAccessUnlessGranted('edit', $this->getUser());
         if ($quack->getDuck() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }
@@ -89,7 +89,7 @@ class QuackController extends AbstractController
     #[Route('/quack/{id}', name: 'app_quack_delete', methods: ['POST'])]
     public function delete(Request $request, Quack $quack, QuackRepository $quackRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $this->denyAccessUnlessGranted('edit', $this->getUser());
         if ($quack->getDuck() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }

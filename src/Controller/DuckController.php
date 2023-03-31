@@ -16,6 +16,7 @@ class DuckController extends AbstractController
     #[Route('/', name: 'app_duck_index', methods: ['GET'])]
     public function index(DuckRepository $duckRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         return $this->render('duck/index.html.twig', [
             'ducks' => $duckRepository->findAll(),
         ]);
@@ -25,6 +26,7 @@ class DuckController extends AbstractController
     public function new(Request $request, DuckRepository $duckRepository): Response
     {
         $duck = new Duck();
+        $this->denyAccessUnlessGranted('view', $duck);
         $form = $this->createForm(DuckType::class, $duck);
         $form->handleRequest($request);
 
@@ -43,6 +45,7 @@ class DuckController extends AbstractController
     #[Route('/{id}', name: 'app_duck_show', methods: ['GET'])]
     public function show(Duck $duck): Response
     {
+        $this->denyAccessUnlessGranted('view', $duck);
         return $this->render('duck/show.html.twig', [
             'duck' => $duck,
         ]);
@@ -51,6 +54,7 @@ class DuckController extends AbstractController
     #[Route('/{id}/edit', name: 'app_duck_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Duck $duck, DuckRepository $duckRepository): Response
     {
+        $this->denyAccessUnlessGranted('edit', $duck);
         $form = $this->createForm(DuckType::class, $duck);
         $form->handleRequest($request);
 
@@ -69,6 +73,7 @@ class DuckController extends AbstractController
     #[Route('/{id}', name: 'app_duck_delete', methods: ['POST'])]
     public function delete(Request $request, Duck $duck, DuckRepository $duckRepository): Response
     {
+        $this->denyAccessUnlessGranted('edit', $this->getUser());
         if ($this->isCsrfTokenValid('delete'.$duck->getId(), $request->request->get('_token'))) {
             $duckRepository->remove($duck, true);
         }

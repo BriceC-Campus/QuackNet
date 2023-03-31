@@ -2,14 +2,15 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Duck;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class DuckVoter extends Voter
 {
-    public const EDIT = 'POST_EDIT';
-    public const VIEW = 'POST_VIEW';
+    public const EDIT = 'edit';
+    public const VIEW = 'view';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -30,15 +31,24 @@ class DuckVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case self::EDIT:
-                // logic to determine if the user can EDIT
-                // return true or false
-                break;
+                return $this->canEdit($subject, $user);
             case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
+                return $this->canView($subject, $user);
         }
 
         return false;
+    }
+    private function canView(Duck $duck, UserInterface $user): bool
+    {
+        // if they can edit, they can view
+        if ($this->canEdit($duck, $user)) {
+            return true;
+        }
+        return false;
+    }
+
+    private function canEdit(Duck $duck, UserInterface $user): bool
+    {
+        return $user === $duck;
     }
 }

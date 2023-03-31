@@ -2,7 +2,6 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Duck;
 use App\Entity\Quack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -11,8 +10,8 @@ use function Symfony\Component\String\u;
 
 class QuackVoter extends Voter
 {
-    public const EDIT = 'EDIT';
-    public const VIEW = 'VIEW';
+    public const EDIT = 'edit';
+    public const VIEW = 'view';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -24,9 +23,7 @@ class QuackVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        $attribute = u($attribute)->upper();
         $user = $token->getUser();
-        dd($user);
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
             return false;
@@ -43,17 +40,17 @@ class QuackVoter extends Voter
         return false;
     }
 
-    private function canView(Quack $quack, Duck $duck): bool
+    private function canView(Quack $quack, UserInterface $user): bool
     {
         // if they can edit, they can view
-        if ($this->canEdit($quack, $duck)) {
+        if ($this->canEdit($quack, $user)) {
             return true;
         }
         return false;
     }
 
-    private function canEdit(Quack $quack, Duck $duck): bool
+    private function canEdit(Quack $quack, UserInterface $user): bool
     {
-        return $duck === $quack->getDuck();
+        return $user === $quack->getDuck();
     }
 }
